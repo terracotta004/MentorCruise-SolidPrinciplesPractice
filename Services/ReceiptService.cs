@@ -4,12 +4,13 @@ public class ConsoleReceiptPrinter : IReceiptPrinter
     {
         Console.WriteLine("----- Receipt -----");
         Console.WriteLine($"Item: {order.Item}");
-        Console.WriteLine($"Price: {order.Price:C}");
+        Console.WriteLine($"Original Price: {order.Price:C}");
         if (order.Customer != null)
         {
             Console.WriteLine($"Customer: {order.Customer.Name}");
             Console.WriteLine($"VIP Status: {(order.Customer.IsVip ? "Yes" : "No")}");
         }
+        Console.WriteLine($"Final Amount: {order.FinalAmount:C}");
         Console.WriteLine("-------------------");
     }
 }
@@ -26,7 +27,8 @@ public class JsonReceiptPrinter : IReceiptPrinter
             {
                 Name = order.Customer.Name,
                 IsVip = order.Customer.IsVip
-            } : null
+            } : null,
+            FinalAmount = order.FinalAmount
         };
 
         string jsonReceipt = System.Text.Json.JsonSerializer.Serialize(receipt, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
@@ -48,3 +50,20 @@ public class ReceiptService
         _receiptPrinter.Print(order);
     }
 }
+
+// This file demonstrates SOLID principles by cleanly separating responsibilities
+// and relying on flexible abstractions. Single Responsibility is followed 
+// because each receipt printer class—ConsoleReceiptPrinter and 
+// JsonReceiptPrinter—handles only its own formatting and output logic, 
+// while ReceiptService is responsible solely for coordinating the printing
+// process. The Open/Closed Principle is achieved through the shared 
+// IReceiptPrinter interface, which allows new output formats (PDF, HTML, 
+// email, etc.) to be added without modifying existing classes. 
+// Liskov Substitution is honored because any implementation of IReceiptPrinter 
+// can be injected into ReceiptService without breaking expected behavior. 
+// Interface Segregation appears in keeping IReceiptPrinter small and 
+// specific to printing, so implementations aren’t forced to support 
+// irrelevant methods. Finally, Dependency Inversion is clearly implemented 
+// because ReceiptService depends on the abstraction (IReceiptPrinter) rather 
+// than any concrete printer, resulting in a highly modular, extensible, 
+// and testable design.

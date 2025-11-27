@@ -19,6 +19,7 @@ switch (customer.IsVip)
 }
 
 var finalAmount = discountService.ApplyDiscount(order.Price);
+order.FinalAmount = finalAmount;
 
 IPaymentMethod paymentMethod = new CreditCardPayment();
 IReceiptPrinter receiptPrinter = new ConsoleReceiptPrinter();

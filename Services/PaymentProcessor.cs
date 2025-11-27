@@ -1,11 +1,5 @@
 public class CreditCardPayment : IPaymentMethod
 {
-
-    public CreditCardPayment()
-    {
-
-    }
-
     public void Pay(decimal amount)
     {
         // Logic to process credit card payment
@@ -15,11 +9,6 @@ public class CreditCardPayment : IPaymentMethod
 
 public class PayPalPayment : IPaymentMethod
 {
-    public PayPalPayment()
-    {
-
-    }
-
     public void Pay(decimal amount)
     {
         // Logic to process PayPal payment
@@ -41,3 +30,19 @@ public class PaymentProcessor
         _paymentMethod.Pay(amount);
     }
 }
+
+// This file applies SOLID principles by structuring payment logic around 
+// clean abstractions and focused responsibilities. Single Responsibility 
+// is observed because each payment class—CreditCardPayment and 
+// PayPalPayment—handles only its own payment logic, while PaymentProcessor 
+// is responsible solely for coordinating a payment, not performing it. 
+// The Open/Closed Principle is achieved through the IPaymentMethod interface, 
+// allowing new payment types (e.g., Apple Pay, CashApp, or Bitcoin) to be 
+// added without modifying existing classes. Liskov Substitution is supported 
+// because any class implementing IPaymentMethod can be used by PaymentProcessor
+// without altering how it functions. The design also reflects Interface 
+// Segregation, since IPaymentMethod contains only what paying methods 
+// need—no more, no less. Finally, Dependency Inversion is implemented 
+// by having PaymentProcessor depend on the abstraction (IPaymentMethod) 
+// rather than concrete payment classes, making the system highly modular, 
+// extensible, and testable.
